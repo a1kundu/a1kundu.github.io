@@ -763,6 +763,26 @@ class _EditPostDialogState extends State<EditPostDialog> {
     }
   }
 
+  void _showPreview() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Preview: ${widget.post['title']}'),
+        content: SizedBox(
+          width: double.maxFinite,
+          height: 400,
+          child: Markdown(data: _contentController.text),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -802,6 +822,13 @@ class _EditPostDialogState extends State<EditPostDialog> {
                 ? null
                 : () => Navigator.of(context).pop(),
             child: const Text('Cancel'),
+          ),
+          OutlinedButton(
+            onPressed:
+                (_isSaving || _isLoading || _contentController.text.isEmpty)
+                ? null
+                : _showPreview,
+            child: const Text('Preview'),
           ),
           ElevatedButton(
             onPressed: (_isSaving || _isLoading) ? null : _updatePost,
