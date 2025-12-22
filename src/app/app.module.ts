@@ -35,11 +35,12 @@ import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatChipsModule } from '@angular/material/chips'
+import { MatChipsModule } from '@angular/material/chips';
+import { HomepageComponent } from './layout/homepage/homepage.component'
 
 
 @NgModule({
-    declarations: [AppComponent, compDeclaration],
+    declarations: [AppComponent, compDeclaration, HomepageComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

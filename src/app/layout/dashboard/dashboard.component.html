@@ -28,15 +28,7 @@
         </mat-toolbar-row>
     </mat-toolbar> -->
 
-    <mat-drawer #drawer class="example-sidenav mat-elevation-z24" mode="side" [opened]="prevSate">
-        <form [formGroup]="configForm">
-            <input formControlName="name" (keyup)="nameChanged()" placeholder="Type Name..." />
-            <br />
-            <br />
-            <button mat-raised-button color="primary" type="button">Save</button>
-        </form>
-    </mat-drawer>
-    <Resume></Resume>
+    <router-outlet></router-outlet>
 </mat-drawer-container>
 <ng-keyboard-shortcuts [shortcuts]="shortcuts"></ng-keyboard-shortcuts>
 <ng-keyboard-shortcuts-help [key]="'?'" [closeKey]="'escape'" [title]="'Help'"></ng-keyboard-shortcuts-help>

@@ -3,12 +3,16 @@ import { ResumeComponent } from './layout/resume/resume.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from '@L/dashboard/dashboard.component';
+import { HomepageComponent } from './layout/homepage/homepage.component';
 
 const routes: Routes = [
     {
         path: '',
         component: DashboardComponent,
-        children: [{ path: '', component: ResumeComponent }],
+        children: [
+            { path: '', component: HomepageComponent },
+            { path: 'resume', component: ResumeComponent }
+        ],
     },
 ];
 
@@ -17,4 +21,4 @@ const routes: Routes = [
     exports: [RouterModule],
 })
 export class AppRoutingModule {}
-export const compDeclaration = [ResumeComponent, ContactQrComponent, DashboardComponent];
+export const compDeclaration = [ResumeComponent, ContactQrComponent, DashboardComponent, HomepageComponent];
