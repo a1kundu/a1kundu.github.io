@@ -126,7 +126,9 @@ class GitHubService {
 }
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+  final VoidCallback? onSaved;
+
+  const SettingsPage({super.key, this.onSaved});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -166,6 +168,8 @@ class _SettingsPageState extends State<SettingsPage> {
       _repoController.text,
       _branchController.text,
     );
+
+    widget.onSaved?.call();
 
     ScaffoldMessenger.of(
       context,
@@ -224,6 +228,249 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 }
 
+class PostWriterDialog extends StatefulWidget {
+  final VoidCallback onPostSaved;
+
+  const PostWriterDialog({super.key, required this.onPostSaved});
+
+  @override
+  State<PostWriterDialog> createState() => _PostWriterDialogState();
+}
+
+class _PostWriterDialogState extends State<PostWriterDialog> {
+  final _titleController = TextEditingController();
+  final _contentController = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  String _generateFilename(String title) {
+    return title
+            .toLowerCase()
+            .replaceAll(' ', '-')
+            .replaceAll(RegExp(r'[^a-z0-9\-]'), '')
+            .replaceAll(RegExp(r'-+'), '-') +
+        '.md';
+  }
+
+  Future<void> _savePost() async {
+    if (_titleController.text.isEmpty || _contentController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in title and content')),
+      );
+      return;
+    }
+
+    final githubService = GitHubService();
+    if (githubService.isConfigured()) {
+      // Save to GitHub
+      final filename = _generateFilename(_titleController.text);
+      final date = DateFormat('yyyy-MM-dd').format(_selectedDate);
+      try {
+        await githubService.savePost(
+          _titleController.text,
+          date,
+          filename,
+          _contentController.text,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Post saved to GitHub: $filename')),
+        );
+        widget.onPostSaved();
+        Navigator.of(context).pop();
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error saving to GitHub: $e')));
+        return;
+      }
+    } else {
+      // Fallback to local save
+      final directory = await getApplicationDocumentsDirectory();
+      final blogDir = Directory('${directory.path}/blogs');
+      await blogDir.create(recursive: true);
+
+      final filename = _generateFilename(_titleController.text);
+      final file = File('${blogDir.path}/$filename');
+      await file.writeAsString(_contentController.text);
+
+      // Load existing posts.json or create new
+      final postsFile = File('${blogDir.path}/posts.json');
+      List<Map<String, dynamic>> posts = [];
+      if (await postsFile.exists()) {
+        final content = await postsFile.readAsString();
+        posts = List<Map<String, dynamic>>.from(json.decode(content));
+      }
+
+      final newPost = {
+        'title': _titleController.text,
+        'date': DateFormat('yyyy-MM-dd').format(_selectedDate),
+        'filename': filename,
+        'deleted': false,
+      };
+      posts.add(newPost);
+
+      await postsFile.writeAsString(json.encode(posts));
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Post saved locally: $filename')));
+      widget.onPostSaved();
+      Navigator.of(context).pop();
+    }
+
+    // Clear fields
+    _titleController.clear();
+    _contentController.clear();
+    setState(() {
+      _selectedDate = DateTime.now();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Write New Post'),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _titleController,
+              decoration: const InputDecoration(
+                labelText: 'Title',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Date: ${DateFormat('yyyy-MM-dd').format(_selectedDate)}',
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () => _selectDate(context),
+                  child: const Text('Select Date'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _contentController,
+              maxLines: 10,
+              decoration: const InputDecoration(
+                labelText: 'Content (Markdown)',
+                border: OutlineInputBorder(),
+                alignLabelWithHint: true,
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        ElevatedButton(onPressed: _savePost, child: const Text('Save Post')),
+      ],
+    );
+  }
+}
+
+class PostsListPage extends StatefulWidget {
+  const PostsListPage({super.key});
+
+  @override
+  State<PostsListPage> createState() => _PostsListPageState();
+}
+
+class _PostsListPageState extends State<PostsListPage> {
+  List<Map<String, dynamic>> _posts = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPosts();
+  }
+
+  Future<void> _loadPosts() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final posts = await GitHubService().fetchPosts();
+    setState(() {
+      _posts = posts.where((post) => !post['deleted']).toList()
+        ..sort(
+          (a, b) =>
+              DateTime.parse(b['date']).compareTo(DateTime.parse(a['date'])),
+        );
+      _isLoading = false;
+    });
+  }
+
+  void _showAddPostDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => PostWriterDialog(onPostSaved: _loadPosts),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Blog Posts'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsPage()),
+              );
+            },
+          ),
+        ],
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _posts.isEmpty
+          ? const Center(child: Text('No posts found'))
+          : ListView.builder(
+              itemCount: _posts.length,
+              itemBuilder: (context, index) {
+                final post = _posts[index];
+                return ListTile(
+                  title: Text(post['title']),
+                  subtitle: Text('Date: ${post['date']}'),
+                  trailing: Text(post['filename']),
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showAddPostDialog,
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
 void main() {
   runApp(const MyApp());
 }
@@ -236,15 +483,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int _selectedIndex = 0;
+  bool _isConfigured = false;
 
   @override
   void initState() {
     super.initState();
-    _loadSettings();
+    _checkConfiguration();
   }
 
-  Future<void> _loadSettings() async {
+  Future<void> _checkConfiguration() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('github_token');
     final owner = prefs.getString('github_owner');
@@ -253,39 +500,36 @@ class _MyAppState extends State<MyApp> {
 
     if (token != null && owner != null && repo != null) {
       GitHubService().configure(token, owner, repo, branch);
+      setState(() {
+        _isConfigured = true;
+      });
     }
   }
 
-  static const List<Widget> _pages = <Widget>[BlogWriterPage(), SettingsPage()];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _onSettingsSaved() {
+    _checkConfiguration();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!_isConfigured) {
+      return MaterialApp(
+        title: 'Blog Writer - Setup',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          useMaterial3: true,
+        ),
+        home: SettingsPage(onSaved: _onSettingsSaved),
+      );
+    }
+
     return MaterialApp(
       title: 'Blog Writer',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: Scaffold(
-        body: _pages[_selectedIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.edit), label: 'Writer'),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Settings',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-        ),
-      ),
+      home: const PostsListPage(),
     );
   }
 }
