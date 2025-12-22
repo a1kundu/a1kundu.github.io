@@ -36,7 +36,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/ngtail-base
+          path: ./dist/a1kundu.github.io
 
   deploy:
     environment:
