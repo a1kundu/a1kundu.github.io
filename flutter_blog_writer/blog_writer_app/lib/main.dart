@@ -579,6 +579,52 @@ class _PostWriterDialogState extends State<PostWriterDialog> {
     }
   }
 
+  void _showPreview() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        insetPadding: EdgeInsets.all(8.0),
+        contentPadding: EdgeInsets.zero,
+        titlePadding: EdgeInsets.zero,
+        actionsPadding: EdgeInsets.zero,
+        title: null,
+        content: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            children: [
+              AppBar(
+                title: Text(
+                  'Preview: ${_titleController.text.isEmpty ? 'New Post' : _titleController.text}',
+                ),
+                automaticallyImplyLeading: false,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Markdown(data: _contentController.text),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Close'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: null,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -653,6 +699,10 @@ class _PostWriterDialogState extends State<PostWriterDialog> {
                           ? null
                           : () => Navigator.of(context).pop(),
                       child: const Text('Cancel'),
+                    ),
+                    ElevatedButton(
+                      onPressed: _isSaving ? null : _showPreview,
+                      child: const Text('Preview'),
                     ),
                     ElevatedButton(
                       onPressed: _isSaving ? null : _savePost,
