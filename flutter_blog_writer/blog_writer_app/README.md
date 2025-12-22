@@ -9,6 +9,7 @@ A Flutter Android app for writing blog posts in Markdown format with GitHub inte
 - **Add New Posts**: Floating action button opens dialog to write new posts
 - **Direct GitHub Integration**: Saves posts directly to your GitHub repo
 - **Automatic Commits**: Each post creates commits for posts.json and .md file
+- **Theme Support**: Choose between Light, Dark, and System theme modes
 
 ## Setup
 
@@ -26,6 +27,7 @@ A Flutter Android app for writing blog posts in Markdown format with GitHub inte
 3. **Add Post**: Tap the + button to open the post writer dialog
 4. **Write**: Enter title, select date, write Markdown content
 5. **Save**: Post is committed directly to your GitHub repository
+6. **Theme**: Use the theme toggle button in the app bar to switch between Light, Dark, and System themes
 
 ## Permissions
 
