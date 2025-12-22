@@ -17,7 +17,7 @@ export class HomepageComponent implements OnInit {
 
   posts: BlogPost[] = [];
   currentPosts: BlogPost[] = [];
-  pageSize = 2;
+  pageSize = 5;
   pageIndex = 0;
   totalPosts = 0;
 
