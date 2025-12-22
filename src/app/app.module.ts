@@ -9,7 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { QRCodeModule } from 'angularx-qrcode';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -80,7 +80,9 @@ import { BlogPostComponent } from './layout/blog-post/blog-post.component'
         MatBadgeModule,
         MatChipsModule,
         MatDialogModule,
-        MarkdownModule.forRoot(),
+        MarkdownModule.forRoot({
+            loader: HttpClient
+        }),
     ],
     providers: [],
     bootstrap: [AppComponent],
