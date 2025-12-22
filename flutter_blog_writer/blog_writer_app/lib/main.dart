@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 
 class GitHubService {
   static final GitHubService _instance = GitHubService._internal();
@@ -825,6 +826,82 @@ class _EditPostDialogState extends State<EditPostDialog> {
   }
 }
 
+class PreviewPostDialog extends StatefulWidget {
+  final Map<String, dynamic> post;
+
+  const PreviewPostDialog({super.key, required this.post});
+
+  @override
+  State<PreviewPostDialog> createState() => _PreviewPostDialogState();
+}
+
+class _PreviewPostDialogState extends State<PreviewPostDialog> {
+  String? _content;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPostContent();
+  }
+
+  Future<void> _loadPostContent() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final githubService = GitHubService();
+      if (githubService.isConfigured()) {
+        _content = await githubService.fetchPostContent(
+          widget.post['filename'],
+        );
+      } else {
+        // Fallback to local file
+        final directory = await getApplicationDocumentsDirectory();
+        final file = File('${directory.path}/blogs/${widget.post['filename']}');
+        if (await file.exists()) {
+          _content = await file.readAsString();
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading post content: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Preview: ${widget.post['title']}'),
+      content: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _content == null
+          ? const Text('Failed to load content')
+          : SizedBox(
+              width: double.maxFinite,
+              height: 400,
+              child: Markdown(data: _content!),
+            ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+}
+
 class PostsListPage extends StatefulWidget {
   final ThemeMode themeMode;
   final Function(ThemeMode) onThemeChanged;
@@ -881,6 +958,14 @@ class _PostsListPageState extends State<PostsListPage> {
     );
   }
 
+  void _showPreviewPostDialog(Map<String, dynamic> post) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => PreviewPostDialog(post: post),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -930,55 +1015,11 @@ class _PostsListPageState extends State<PostsListPage> {
                 itemBuilder: (context, index) {
                   final post = _posts[index];
                   return GestureDetector(
-                    onLongPressStart: (details) {
-                      showMenu<String>(
-                        context: context,
-                        position: RelativeRect.fromLTRB(
-                          details.globalPosition.dx,
-                          details.globalPosition.dy,
-                          details.globalPosition.dx + 1,
-                          details.globalPosition.dy + 1,
-                        ),
-                        items: [
-                          PopupMenuItem<String>(
-                            value: 'edit',
-                            child: Row(
-                              children: [
-                                Icon(Icons.edit),
-                                SizedBox(width: 8),
-                                Text('Edit'),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ).then((value) {
-                        if (value == 'edit') {
-                          _showEditPostDialog(post);
-                        }
-                      });
-                    },
+                    onTap: () => _showPreviewPostDialog(post),
+                    onDoubleTap: () => _showEditPostDialog(post),
                     child: ListTile(
                       title: Text(post['title']),
                       subtitle: Text('Date: ${post['date']}'),
-                      trailing: PopupMenuButton<String>(
-                        onSelected: (value) {
-                          if (value == 'edit') {
-                            _showEditPostDialog(post);
-                          }
-                        },
-                        itemBuilder: (context) => [
-                          const PopupMenuItem<String>(
-                            value: 'edit',
-                            child: Row(
-                              children: [
-                                Icon(Icons.edit),
-                                SizedBox(width: 8),
-                                Text('Edit'),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                   );
                 },
