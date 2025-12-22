@@ -23,7 +23,6 @@
         "angularx-qrcode": "^14.0.0",
         "material-design-icons": "^3.0.1",
         "ng-keyboard-shortcuts": "^13.0.8",
-        "ngtail-base": "file:",
         "rxjs": "~7.5.0",
         "tslib": "^2.3.0",
         "zone.js": "~0.11.4"
