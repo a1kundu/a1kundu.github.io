@@ -2,4 +2,22 @@
   <h1>Welcome to My Portfolio</h1>
   <p>This is the homepage of my personal website.</p>
   <a routerLink="/resume">View My Resume</a>
+
+  <h2>Blog Posts</h2>
+  <div class="blog-posts">
+    <div *ngFor="let post of currentPosts" class="blog-post">
+      <h3>{{ post.title }}</h3>
+      <p class="post-date">{{ post.date | date:'mediumDate' }}</p>
+      <div class="blog-content" *ngIf="post.content">
+        <markdown [data]="post.content"></markdown>
+      </div>
+    </div>
+  </div>
+  <mat-paginator
+    [length]="totalPosts"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[1, 2, 5]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons>
+  </mat-paginator>
 </div>

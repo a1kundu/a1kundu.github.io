@@ -1,0 +1,17 @@
+[
+  {
+    "title": "My First Blog Post",
+    "date": "2025-12-22",
+    "filename": "sample-post.md"
+  },
+  {
+    "title": "Second Post",
+    "date": "2025-12-21",
+    "filename": "second-post.md"
+  },
+  {
+    "title": "Third Post",
+    "date": "2025-12-20",
+    "filename": "third-post.md"
+  }
+]
