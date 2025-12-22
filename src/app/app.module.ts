@@ -40,7 +40,7 @@ import { HomepageComponent } from './layout/homepage/homepage.component'
 
 
 @NgModule({
-    declarations: [AppComponent, compDeclaration, HomepageComponent],
+    declarations: [AppComponent, compDeclaration],
     imports: [
         BrowserModule,
         AppRoutingModule,
