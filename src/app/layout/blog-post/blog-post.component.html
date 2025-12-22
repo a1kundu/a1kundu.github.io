@@ -1,11 +1,11 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-4xl mx-auto">
+  <div class="max-w-7xl mx-auto">
     <div *ngIf="loading" class="text-center">
       <p>Loading...</p>
     </div>
     <div *ngIf="!loading && post">
       <div class="bg-white rounded-lg shadow-md p-8">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ post.title }}</h1>
+        <h1 class="text-6xl font-bold text-gray-900 mb-4">{{ post.title }}</h1>
         <p class="text-lg text-gray-600 mb-8">{{ post.date | date:'mediumDate' }}</p>
         <div class="prose prose-lg max-w-none">
           <markdown
