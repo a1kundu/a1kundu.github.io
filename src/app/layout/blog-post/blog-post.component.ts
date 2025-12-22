@@ -45,4 +45,12 @@ export class BlogPostComponent implements OnInit {
       });
   }
 
+  getReadingTime(): number {
+    if (!this.post?.content) return 0;
+    // Average reading speed: 200 words per minute
+    const wordsPerMinute = 200;
+    const words = this.post.content.split(/\s+/).length;
+    return Math.ceil(words / wordsPerMinute);
+  }
+
 }
