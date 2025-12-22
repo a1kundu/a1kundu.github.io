@@ -19,7 +19,7 @@ module.exports = function (config) {
             suppressAll: true, // removes the duplicated traces
         },
         coverageReporter: {
-            dir: require("path").join(__dirname, "./coverage/ngtail-base"),
+            dir: require("path").join(__dirname, "./coverage/a1kundu.github.io"),
             subdir: ".",
             reporters: [{ type: "html" }, { type: "text-summary" }],
         },
