@@ -48,7 +48,7 @@
                         "assets": ["src/favicon.ico", "src/assets"],
                         "styles": [
                             "src/styles.scss",
-                            "node_modules/prismjs/themes/prism-okaidia.css",
+                            "node_modules/prism-themes/themes/prism-one-dark.css",
                             "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
                             "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css",
                             "node_modules/prismjs/plugins/command-line/prism-command-line.css",
@@ -133,7 +133,7 @@
                         "assets": ["src/favicon.ico", "src/assets"],
                         "styles": [
                             "src/styles.scss",
-                            "node_modules/prismjs/themes/prism-okaidia.css",
+                            "node_modules/prism-themes/themes/prism-one-dark.css",
                             "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
                             "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css",
                             "node_modules/prismjs/plugins/command-line/prism-command-line.css",
