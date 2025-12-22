@@ -584,70 +584,102 @@ class _PostWriterDialogState extends State<PostWriterDialog> {
     return WillPopScope(
       onWillPop: () async => !_isSaving,
       child: AlertDialog(
-        title: const Text('Write New Post'),
-        content: SingleChildScrollView(
+        insetPadding: EdgeInsets.all(8.0),
+        contentPadding: EdgeInsets.zero,
+        titlePadding: EdgeInsets.zero,
+        actionsPadding: EdgeInsets.zero,
+        title: null,
+        content: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
-                controller: _titleController,
-                enabled: !_isSaving,
-                decoration: const InputDecoration(
-                  labelText: 'Title',
-                  border: OutlineInputBorder(),
+              AppBar(
+                title: const Text('Write New Post'),
+                automaticallyImplyLeading: false,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        controller: _titleController,
+                        enabled: !_isSaving,
+                        decoration: const InputDecoration(
+                          labelText: 'Title',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Date: ${DateFormat('yyyy-MM-dd').format(_selectedDate)}',
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: _isSaving
+                                ? null
+                                : () => _selectDate(context),
+                            child: const Text('Select Date'),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: _contentController,
+                        enabled: !_isSaving,
+                        maxLines: 10,
+                        decoration: const InputDecoration(
+                          labelText: 'Content (Markdown)',
+                          border: OutlineInputBorder(),
+                          alignLabelWithHint: true,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Date: ${DateFormat('yyyy-MM-dd').format(_selectedDate)}',
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: _isSaving
+                          ? null
+                          : () => Navigator.of(context).pop(),
+                      child: const Text('Cancel'),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: _isSaving ? null : () => _selectDate(context),
-                    child: const Text('Select Date'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _contentController,
-                enabled: !_isSaving,
-                maxLines: 10,
-                decoration: const InputDecoration(
-                  labelText: 'Content (Markdown)',
-                  border: OutlineInputBorder(),
-                  alignLabelWithHint: true,
+                    ElevatedButton(
+                      onPressed: _isSaving ? null : _savePost,
+                      child: _isSaving
+                          ? const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Text('Saving...'),
+                              ],
+                            )
+                          : const Text('Save Post'),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         ),
-        actions: [
-          TextButton(
-            onPressed: _isSaving ? null : () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: _isSaving ? null : _savePost,
-            child: _isSaving
-                ? const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                      SizedBox(width: 8),
-                      Text('Saving...'),
-                    ],
-                  )
-                : const Text('Save Post'),
-          ),
-        ],
+        actions: null,
       ),
     );
   }
@@ -767,18 +799,42 @@ class _EditPostDialogState extends State<EditPostDialog> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Preview: ${widget.post['title']}'),
-        content: SizedBox(
-          width: double.maxFinite,
-          height: 400,
-          child: Markdown(data: _contentController.text),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
+        insetPadding: EdgeInsets.all(8.0),
+        contentPadding: EdgeInsets.zero,
+        titlePadding: EdgeInsets.zero,
+        actionsPadding: EdgeInsets.zero,
+        title: null,
+        content: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            children: [
+              AppBar(
+                title: Text('Preview: ${widget.post['title']}'),
+                automaticallyImplyLeading: false,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Markdown(data: _contentController.text),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Close'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
+        actions: null,
       ),
     );
   }
@@ -788,66 +844,93 @@ class _EditPostDialogState extends State<EditPostDialog> {
     return WillPopScope(
       onWillPop: () async => !_isSaving,
       child: AlertDialog(
-        title: Text('Edit Post: ${widget.post['title']}'),
-        content: _isLoading
-            ? const SizedBox(
-                height: 100,
-                child: Center(child: CircularProgressIndicator()),
-              )
-            : SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Filename: ${widget.post['filename']}',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: _contentController,
-                      enabled: !_isSaving && !_isLoading,
-                      maxLines: 10,
-                      decoration: const InputDecoration(
-                        labelText: 'Content (Markdown)',
-                        border: OutlineInputBorder(),
-                        alignLabelWithHint: true,
+        insetPadding: EdgeInsets.all(8.0),
+        contentPadding: EdgeInsets.zero,
+        titlePadding: EdgeInsets.zero,
+        actionsPadding: EdgeInsets.zero,
+        title: null,
+        content: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            children: [
+              AppBar(
+                title: Text('Edit Post: ${widget.post['title']}'),
+                automaticallyImplyLeading: false,
+              ),
+              Expanded(
+                child: _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : SingleChildScrollView(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Filename: ${widget.post['filename']}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            const SizedBox(height: 16),
+                            TextField(
+                              controller: _contentController,
+                              enabled: !_isSaving && !_isLoading,
+                              maxLines: 10,
+                              decoration: const InputDecoration(
+                                labelText: 'Content (Markdown)',
+                                border: OutlineInputBorder(),
+                                alignLabelWithHint: true,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: (_isSaving || _isLoading)
+                          ? null
+                          : () => Navigator.of(context).pop(),
+                      child: const Text('Cancel'),
+                    ),
+                    OutlinedButton(
+                      onPressed:
+                          (_isSaving ||
+                              _isLoading ||
+                              _contentController.text.isEmpty)
+                          ? null
+                          : _showPreview,
+                      child: const Text('Preview'),
+                    ),
+                    ElevatedButton(
+                      onPressed: (_isSaving || _isLoading) ? null : _updatePost,
+                      child: _isSaving
+                          ? const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Text('Updating...'),
+                              ],
+                            )
+                          : const Text('Update Post'),
                     ),
                   ],
                 ),
               ),
-        actions: [
-          TextButton(
-            onPressed: (_isSaving || _isLoading)
-                ? null
-                : () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            ],
           ),
-          OutlinedButton(
-            onPressed:
-                (_isSaving || _isLoading || _contentController.text.isEmpty)
-                ? null
-                : _showPreview,
-            child: const Text('Preview'),
-          ),
-          ElevatedButton(
-            onPressed: (_isSaving || _isLoading) ? null : _updatePost,
-            child: _isSaving
-                ? const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                      SizedBox(width: 8),
-                      Text('Updating...'),
-                    ],
-                  )
-                : const Text('Update Post'),
-          ),
-        ],
+        ),
+        actions: null,
       ),
     );
   }
@@ -909,22 +992,46 @@ class _PreviewPostDialogState extends State<PreviewPostDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Preview: ${widget.post['title']}'),
-      content: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _content == null
-          ? const Text('Failed to load content')
-          : SizedBox(
-              width: double.maxFinite,
-              height: 400,
-              child: Markdown(data: _content!),
+      insetPadding: EdgeInsets.all(8.0),
+      contentPadding: EdgeInsets.zero,
+      titlePadding: EdgeInsets.zero,
+      actionsPadding: EdgeInsets.zero,
+      title: null,
+      content: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          children: [
+            AppBar(
+              title: Text('Preview: ${widget.post['title']}'),
+              automaticallyImplyLeading: false,
             ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Close'),
+            Expanded(
+              child: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _content == null
+                  ? const Center(child: Text('Failed to load content'))
+                  : Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Markdown(data: _content!),
+                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Close'),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
+      actions: null,
     );
   }
 }
