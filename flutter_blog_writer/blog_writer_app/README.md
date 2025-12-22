@@ -1,30 +1,39 @@
 # Blog Writer App
 
-A Flutter Android app for writing blog posts in Markdown format.
+A Flutter Android app for writing blog posts in Markdown format with GitHub integration.
 
 ## Features
 
 - Write blog posts with title, date, and Markdown content
 - Automatically generates filename from title
-- Saves posts locally on device
+- Saves posts directly to GitHub repository
 - Maintains posts.json for blog metadata
+- Settings page to configure GitHub repo and token
+- Syncs with GitHub on app start
+
+## Setup
+
+1. Create a GitHub Personal Access Token with `repo` permissions
+2. In the app's Settings page, enter:
+   - GitHub Access Token
+   - Repository Owner (e.g., a1kundu)
+   - Repository Name (e.g., a1kundu.github.io)
+   - Branch (e.g., main)
 
 ## Usage
 
-1. Enter the blog post title
-2. Select the publication date
-3. Write the content in Markdown format
-4. Tap "Save Post" to save
+1. Configure settings with your GitHub details
+2. Switch to Writer tab
+3. Enter the blog post title
+4. Select the publication date
+5. Write the content in Markdown format
+6. Tap "Save Post" to commit and push to GitHub
 
-Posts are saved to the device's documents directory under `blogs/` folder.
+Posts are saved to `src/assets/blogs/` in your repository.
 
-## Copying to Repository
+## Permissions
 
-After writing posts in the app, you can find the files in the app's storage. To add them to your GitHub Pages blog:
-
-1. Locate the saved files (posts.json and .md files) in the app's storage
-2. Copy them to your repository's `src/assets/blogs/` directory
-3. Commit and push the changes
+The app requires internet access to communicate with GitHub API.
 
 ## Building
 
