@@ -1,0 +1,72 @@
+// Fix Prism.js line number alignment
+:host ::ng-deep {
+  // Ensure line numbers and code have the same line height and font properties
+  pre[class*="language-"] {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    tab-size: 4;
+
+    &.line-numbers {
+      position: relative;
+      padding-left: 3.8em;
+      counter-reset: linenumber;
+    }
+
+    .line-numbers-rows {
+      position: absolute;
+      pointer-events: none;
+      top: 0;
+      font-size: 100%;
+      left: -3.8em;
+      width: 3em;
+      letter-spacing: -1px;
+      border-right: 1px solid;
+      user-select: none;
+
+      > span {
+        display: block;
+        counter-increment: linenumber;
+        height: 1.5em;
+        line-height: 1.5;
+        text-align: right;
+        padding-right: 0.8em;
+        box-sizing: border-box;
+
+        &::before {
+          content: counter(linenumber);
+          display: block;
+          text-align: right;
+        }
+      }
+    }
+
+    code {
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      display: block;
+      padding: 0;
+      margin: 0;
+      overflow: visible;
+      white-space: pre;
+      word-wrap: normal;
+      background: transparent;
+    }
+  }
+
+  // Additional fix for line number alignment
+  .line-numbers-rows span {
+    height: 1.5em !important;
+    line-height: 1.5 !important;
+    display: block !important;
+  }
+
+  // Ensure code blocks have consistent spacing
+  pre[class*="language-"] {
+    margin: 1rem 0;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    overflow: auto;
+  }
+}
