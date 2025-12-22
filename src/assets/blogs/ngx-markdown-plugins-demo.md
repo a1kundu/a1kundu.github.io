@@ -26,6 +26,34 @@ class UserService {
 }
 ```
 
+And here's a C# example:
+
+```csharp
+using System;
+
+public class User
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+}
+
+public class UserService
+{
+    private List<User> users = new List<User>();
+
+    public void AddUser(User user)
+    {
+        users.Add(user);
+    }
+
+    public User GetUserById(int id)
+    {
+        return users.Find(user => user.Id == id);
+    }
+}
+```
+
 ## Line Highlighting
 
 You can highlight specific lines in code blocks using special comments. For example, let's highlight the error handling part:
@@ -220,6 +248,7 @@ Some more examples:
 | Python | `print("Hello, World!")` |
 | JavaScript | `console.log("Hello, World!")` |
 | Java | `System.out.println("Hello, World!");` |
+| C# | `Console.WriteLine("Hello, World!");` |
 
 ### Mixed Content
 
