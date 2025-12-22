@@ -54,6 +54,519 @@ public class UserService
 }
 ```
 
+And here's a CSS example:
+
+```css
+/* Basic CSS styling */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+```
+
+Here's an SCSS example with variables and nesting:
+
+```scss
+// SCSS Variables and nesting
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$border-radius: 4px;
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: $border-radius * 2;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  .header {
+    background-color: $primary-color;
+    color: white;
+    padding: 20px;
+    border-radius: $border-radius * 2 $border-radius * 2 0 0;
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+  }
+
+  .content {
+    padding: 20px;
+
+    .button {
+      background-color: $primary-color;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: $border-radius;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+
+      &.secondary {
+        background-color: $secondary-color;
+
+        &:hover {
+          background-color: darken($secondary-color, 10%);
+        }
+      }
+    }
+  }
+}
+```
+
+Here's a LESS example with mixins:
+
+```less
+// LESS Mixins and variables
+@primary-color: #007bff;
+@secondary-color: #6c757d;
+@border-radius: 4px;
+
+// Mixin for buttons
+.button-mixin(@bg-color, @text-color: white) {
+  background-color: @bg-color;
+  color: @text-color;
+  padding: 10px 20px;
+  border: none;
+  border-radius: @border-radius;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: darken(@bg-color, 10%);
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: @border-radius * 2;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  .header {
+    background-color: @primary-color;
+    color: white;
+    padding: 20px;
+    border-radius: @border-radius * 2 @border-radius * 2 0 0;
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+  }
+
+  .content {
+    padding: 20px;
+
+    .primary-button {
+      .button-mixin(@primary-color);
+    }
+
+    .secondary-button {
+      .button-mixin(@secondary-color);
+    }
+  }
+}
+```
+
+And here's a Python example:
+
+```python
+# Python example with classes and functions
+class User:
+    def __init__(self, user_id, name, email):
+        self.user_id = user_id
+        self.name = name
+        self.email = email
+
+    def __str__(self):
+        return f"User(id={self.user_id}, name='{self.name}', email='{self.email}')"
+
+class UserService:
+    def __init__(self):
+        self.users = []
+        self.next_id = 1
+
+    def add_user(self, name, email):
+        user = User(self.next_id, name, email)
+        self.users.append(user)
+        self.next_id += 1
+        return user
+
+    def get_user_by_id(self, user_id):
+        for user in self.users:
+            if user.user_id == user_id:
+                return user
+        return None
+
+    def get_all_users(self):
+        return self.users.copy()
+
+# Example usage
+if __name__ == "__main__":
+    service = UserService()
+    
+    # Add some users
+    user1 = service.add_user("Alice Johnson", "alice@example.com")
+    user2 = service.add_user("Bob Smith", "bob@example.com")
+    
+    print("All users:")
+    for user in service.get_all_users():
+        print(f"  {user}")
+    
+    # Find a specific user
+    found_user = service.get_user_by_id(1)
+    if found_user:
+        print(f"\nFound user: {found_user}")
+    else:
+        print("\nUser not found")
+```
+
+And here's a Java example:
+
+```java
+public class User {
+    private int id;
+    private String name;
+    private String email;
+
+    public User(int id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    @Override
+    public String toString() {
+        return "User{id=" + id + ", name='" + name + "', email='" + email + "'}";
+    }
+}
+
+public class UserService {
+    private List<User> users;
+    private int nextId;
+
+    public UserService() {
+        this.users = new ArrayList<>();
+        this.nextId = 1;
+    }
+
+    public User addUser(String name, String email) {
+        User user = new User(nextId++, name, email);
+        users.add(user);
+        return user;
+    }
+
+    public User getUserById(int id) {
+        for (User user : users) {
+            if (user.getId() == id) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public List<User> getAllUsers() {
+        return new ArrayList<>(users);
+    }
+}
+
+// Example usage
+public class Main {
+    public static void main(String[] args) {
+        UserService service = new UserService();
+
+        // Add users
+        User user1 = service.addUser("Alice Johnson", "alice@example.com");
+        User user2 = service.addUser("Bob Smith", "bob@example.com");
+
+        // Display all users
+        System.out.println("All users:");
+        for (User user : service.getAllUsers()) {
+            System.out.println("  " + user);
+        }
+
+        // Find specific user
+        User foundUser = service.getUserById(1);
+        if (foundUser != null) {
+            System.out.println("\nFound user: " + foundUser);
+        } else {
+            System.out.println("\nUser not found");
+        }
+    }
+}
+```
+
+Here's a JavaScript example:
+
+```javascript
+class User {
+    constructor(id, name, email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
+
+    toString() {
+        return `User(id=${this.id}, name='${this.name}', email='${this.email}')`;
+    }
+}
+
+class UserService {
+    constructor() {
+        this.users = [];
+        this.nextId = 1;
+    }
+
+    addUser(name, email) {
+        const user = new User(this.nextId++, name, email);
+        this.users.push(user);
+        return user;
+    }
+
+    getUserById(id) {
+        return this.users.find(user => user.id === id);
+    }
+
+    getAllUsers() {
+        return [...this.users];
+    }
+}
+
+// Example usage
+const service = new UserService();
+
+// Add users
+const user1 = service.addUser("Alice Johnson", "alice@example.com");
+const user2 = service.addUser("Bob Smith", "bob@example.com");
+
+// Display all users
+console.log("All users:");
+service.getAllUsers().forEach(user => {
+    console.log(`  ${user}`);
+});
+
+// Find specific user
+const foundUser = service.getUserById(1);
+if (foundUser) {
+    console.log(`\nFound user: ${foundUser}`);
+} else {
+    console.log("\nUser not found");
+}
+```
+
+Here's a C example:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct {
+    int id;
+    char name[100];
+    char email[100];
+} User;
+
+typedef struct {
+    User* users;
+    int count;
+    int capacity;
+    int nextId;
+} UserService;
+
+UserService* createUserService() {
+    UserService* service = (UserService*)malloc(sizeof(UserService));
+    service->users = (User*)malloc(10 * sizeof(User));
+    service->count = 0;
+    service->capacity = 10;
+    service->nextId = 1;
+    return service;
+}
+
+User* addUser(UserService* service, const char* name, const char* email) {
+    if (service->count >= service->capacity) {
+        service->capacity *= 2;
+        service->users = (User*)realloc(service->users, service->capacity * sizeof(User));
+    }
+
+    User* user = &service->users[service->count++];
+    user->id = service->nextId++;
+    strcpy(user->name, name);
+    strcpy(user->email, email);
+    return user;
+}
+
+User* getUserById(UserService* service, int id) {
+    for (int i = 0; i < service->count; i++) {
+        if (service->users[i].id == id) {
+            return &service->users[i];
+        }
+    }
+    return NULL;
+}
+
+void printUser(User* user) {
+    printf("User(id=%d, name='%s', email='%s')\n", user->id, user->name, user->email);
+}
+
+int main() {
+    UserService* service = createUserService();
+
+    // Add users
+    User* user1 = addUser(service, "Alice Johnson", "alice@example.com");
+    User* user2 = addUser(service, "Bob Smith", "bob@example.com");
+
+    // Display all users
+    printf("All users:\n");
+    for (int i = 0; i < service->count; i++) {
+        printf("  ");
+        printUser(&service->users[i]);
+    }
+
+    // Find specific user
+    User* foundUser = getUserById(service, 1);
+    if (foundUser) {
+        printf("\nFound user: ");
+        printUser(foundUser);
+    } else {
+        printf("\nUser not found\n");
+    }
+
+    // Cleanup
+    free(service->users);
+    free(service);
+
+    return 0;
+}
+```
+
+And here's a C++ example:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <string>
+#include <memory>
+
+class User {
+private:
+    int id;
+    std::string name;
+    std::string email;
+
+public:
+    User(int id, const std::string& name, const std::string& email)
+        : id(id), name(name), email(email) {}
+
+    int getId() const { return id; }
+    const std::string& getName() const { return name; }
+    const std::string& getEmail() const { return email; }
+
+    std::string toString() const {
+        return "User(id=" + std::to_string(id) + ", name='" + name + "', email='" + email + "')";
+    }
+};
+
+class UserService {
+private:
+    std::vector<std::unique_ptr<User>> users;
+    int nextId;
+
+public:
+    UserService() : nextId(1) {}
+
+    User* addUser(const std::string& name, const std::string& email) {
+        auto user = std::make_unique<User>(nextId++, name, email);
+        User* userPtr = user.get();
+        users.push_back(std::move(user));
+        return userPtr;
+    }
+
+    User* getUserById(int id) const {
+        for (const auto& user : users) {
+            if (user->getId() == id) {
+                return user.get();
+            }
+        }
+        return nullptr;
+    }
+
+    const std::vector<User*> getAllUsers() const {
+        std::vector<User*> result;
+        for (const auto& user : users) {
+            result.push_back(user.get());
+        }
+        return result;
+    }
+};
+
+int main() {
+    UserService service;
+
+    // Add users
+    User* user1 = service.addUser("Alice Johnson", "alice@example.com");
+    User* user2 = service.addUser("Bob Smith", "bob@example.com");
+
+    // Display all users
+    std::cout << "All users:" << std::endl;
+    for (User* user : service.getAllUsers()) {
+        std::cout << "  " << user->toString() << std::endl;
+    }
+
+    // Find specific user
+    User* foundUser = service.getUserById(1);
+    if (foundUser) {
+        std::cout << "\nFound user: " << foundUser->toString() << std::endl;
+    } else {
+        std::cout << "\nUser not found" << std::endl;
+    }
+
+    return 0;
+}
+```
+
 ## Line Highlighting
 
 You can highlight specific lines in code blocks using special comments. For example, let's highlight the error handling part:
@@ -249,6 +762,13 @@ Some more examples:
 | JavaScript | `console.log("Hello, World!")` |
 | Java | `System.out.println("Hello, World!");` |
 | C# | `Console.WriteLine("Hello, World!");` |
+| CSS | `body { color: red; }` |
+| SCSS | `$color: red; body { color: $color; }` |
+| LESS | `@color: red; body { color: @color; }` |
+| TypeScript | `console.log("Hello, World!");` |
+| C | `printf("Hello, World!\n");` |
+| C++ | `std::cout << "Hello, World!" << std::endl;` |
+| Bash | `echo "Hello, World!"` |
 
 ### Mixed Content
 
