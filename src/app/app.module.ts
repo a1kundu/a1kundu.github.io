@@ -36,7 +36,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
-import { MarkdownModule } from 'ngx-markdown';
+import { MarkdownModule, MermaidAPI } from 'ngx-markdown';
 import { HomepageComponent } from './layout/homepage/homepage.component';
 import { BlogPostComponent } from './layout/blog-post/blog-post.component'
 
