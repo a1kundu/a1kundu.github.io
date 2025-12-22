@@ -2,13 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PageEvent } from '@angular/material/paginator';
 import { forkJoin } from 'rxjs';
-
-interface BlogPost {
-  title: string;
-  date: string;
-  filename: string;
-  content?: string;
-}
+import { BlogPost } from '../../core/interfaces';
 
 @Component({
   selector: 'ark-homepage',
@@ -32,8 +26,8 @@ export class HomepageComponent implements OnInit {
   loadPosts(): void {
     this.http.get<BlogPost[]>('assets/blogs/posts.json')
       .subscribe(posts => {
-        // Sort by date descending (latest first)
-        this.posts = posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        // Filter out deleted posts and sort by date descending (latest first)
+        this.posts = posts.filter(post => !post.deleted).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
         // Load content for each post
         const contentRequests = this.posts.map(post =>

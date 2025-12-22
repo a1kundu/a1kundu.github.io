@@ -1,13 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-
-interface BlogPost {
-  title: string;
-  date: string;
-  filename: string;
-  content?: string;
-}
+import { BlogPost } from '../../core/interfaces';
 
 @Component({
   selector: 'ark-blog-post',
@@ -32,7 +26,7 @@ export class BlogPostComponent implements OnInit {
     this.http.get<BlogPost[]>('assets/blogs/posts.json')
       .subscribe(posts => {
         const post = posts.find(p => p.filename === filename);
-        if (post) {
+        if (post && !post.deleted) {
           this.post = post;
           this.http.get(`assets/blogs/${filename}`, { responseType: 'text' })
             .subscribe(content => {

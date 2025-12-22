@@ -47,3 +47,10 @@ export interface Human {
     experience: Section[];
     skills: SkillArea[];
 }
+export interface BlogPost {
+    title: string;
+    date: string;
+    filename: string;
+    deleted?: boolean;
+    content?: string;
+}
