@@ -6,7 +6,6 @@ interface BlogPost {
   title: string;
   date: string;
   filename: string;
-  content?: string;
 }
 
 @Component({
@@ -35,22 +34,12 @@ export class HomepageComponent implements OnInit {
         this.posts = posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         this.totalPosts = this.posts.length;
         this.updateCurrentPosts();
-        this.loadPostContents();
       });
   }
 
   updateCurrentPosts(): void {
     const startIndex = this.pageIndex * this.pageSize;
     this.currentPosts = this.posts.slice(startIndex, startIndex + this.pageSize);
-  }
-
-  loadPostContents(): void {
-    this.posts.forEach(post => {
-      this.http.get(`assets/blogs/${post.filename}`, { responseType: 'text' })
-        .subscribe(content => {
-          post.content = content;
-        });
-    });
   }
 
   onPageChange(event: PageEvent): void {
