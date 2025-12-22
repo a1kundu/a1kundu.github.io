@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { Title } from '@angular/platform-browser';
 import { BlogPost } from '../../core/interfaces';
 
 @Component({
@@ -13,7 +14,7 @@ export class BlogPostComponent implements OnInit {
   post: BlogPost | null = null;
   loading = true;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) { }
+  constructor(private route: ActivatedRoute, private http: HttpClient, private titleService: Title) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -28,6 +29,7 @@ export class BlogPostComponent implements OnInit {
         const post = posts.find(p => p.filename === filename);
         if (post && !post.deleted) {
           this.post = post;
+          this.titleService.setTitle(post.title);
           this.http.get(`assets/blogs/${filename}`, { responseType: 'text' })
             .subscribe(content => {
               this.post!.content = content;
