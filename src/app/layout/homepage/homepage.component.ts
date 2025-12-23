@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { PageEvent } from '@angular/material/paginator';
 import { forkJoin } from 'rxjs';
 import { BlogPost } from '../../core/interfaces';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'ark-homepage',
@@ -24,15 +25,17 @@ export class HomepageComponent implements OnInit {
   }
 
   loadPosts(): void {
-    this.http.get<BlogPost[]>('assets/blogs/posts.json')
+    const postsUrl = `https://raw.githubusercontent.com/${environment.github.username}/${environment.github.repo}/refs/heads/${environment.github.branch}/src/assets/blogs/posts.json`;
+    this.http.get<BlogPost[]>(postsUrl)
       .subscribe(posts => {
         // Filter out deleted posts and sort by date descending (latest first)
         this.posts = posts.filter(post => !post.deleted).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
         // Load content for each post
-        const contentRequests = this.posts.map(post =>
-          this.http.get(`assets/blogs/${post.filename}`, { responseType: 'text' })
-        );
+        const contentRequests = this.posts.map(post => {
+          const contentUrl = `https://raw.githubusercontent.com/${environment.github.username}/${environment.github.repo}/refs/heads/${environment.github.branch}/src/assets/blogs/${post.filename}`;
+          return this.http.get(contentUrl, { responseType: 'text' });
+        });
 
         forkJoin(contentRequests).subscribe(contents => {
           this.posts.forEach((post, index) => {

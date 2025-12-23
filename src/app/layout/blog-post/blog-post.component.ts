@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
 import { BlogPost } from '../../core/interfaces';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'ark-blog-post',
@@ -24,13 +25,15 @@ export class BlogPostComponent implements OnInit {
   }
 
   loadPost(filename: string): void {
-    this.http.get<BlogPost[]>('assets/blogs/posts.json')
+    const postsUrl = `https://raw.githubusercontent.com/${environment.github.username}/${environment.github.repo}/refs/heads/${environment.github.branch}/src/assets/blogs/posts.json`;
+    this.http.get<BlogPost[]>(postsUrl)
       .subscribe(posts => {
         const post = posts.find(p => p.filename === filename);
         if (post && !post.deleted) {
           this.post = post;
           this.titleService.setTitle(post.title);
-          this.http.get(`assets/blogs/${filename}`, { responseType: 'text' })
+          const contentUrl = `https://raw.githubusercontent.com/${environment.github.username}/${environment.github.repo}/refs/heads/${environment.github.branch}/src/assets/blogs/${filename}`;
+          this.http.get(contentUrl, { responseType: 'text' })
             .subscribe(content => {
               this.post!.content = content;
               this.loading = false;
