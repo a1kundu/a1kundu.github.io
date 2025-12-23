@@ -25,16 +25,30 @@ jobs:
           node-version: '18'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install dependencies (Root - for Angular)
         run: npm ci
 
-      - name: Build
+      - name: Install dependencies (Next.js)
+        run: cd nextjs-app && npm ci
+
+      - name: Build Angular
         run: npm run build
+
+      - name: Build Next.js
+        run: cd nextjs-app && npm run build
+
+      - name: Organize build outputs
+        run: |
+          mkdir -p dist
+          # Move Next.js static files to dist root
+          cp -r nextjs-app/out/* dist/
+          # Move Angular build to subfolder
+          mv dist/a1kundu.github.io dist/angular
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/a1kundu.github.io
+          path: ./dist
 
   deploy:
     environment:

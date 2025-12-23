@@ -68,7 +68,8 @@
                             "node_modules/katex/dist/contrib/auto-render.min.js",
                             "node_modules/mermaid/dist/mermaid.min.js",
                             "node_modules/clipboard/dist/clipboard.min.js"
-                        ]
+                        ],
+                        "baseHref": "/angular/"
                     },
                     "configurations": {
                         "production": {
