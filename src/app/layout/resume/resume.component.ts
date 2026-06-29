@@ -34,7 +34,7 @@ END:VCARD
 
 	get yearsOfExperience(): string {
 		var diffStr: string = '';
-		var currentDate = new Date('2022-03-16');
+		var currentDate = new Date('2022-10-01');
 		var diff: number = Math.abs(this.dt.getTime() - currentDate.getTime());
 		var diffDays: number = Math.ceil(diff / (1000 * 3600 * 24));
 
