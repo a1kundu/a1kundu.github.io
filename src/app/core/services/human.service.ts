@@ -11,7 +11,7 @@ export class HumanService {
 			name: 'Debasish Kundu',
 			organization: 'Infosys Limited',
 			designation: 'Senior System Engineer (Data Engineer) at Infosys',
-			address: 'Bankura, West Bengal 722139',
+			address: 'kolkata, West Bengal 700163',
 			qr: 'BEGIN:VCARD\
             VERSION:3.0\
             N:DEBASISH KUNDU;\
@@ -19,7 +19,7 @@ export class HumanService {
             TITLE:Senior System Engineer\
             EMAIL;TYPE=INTERNET:dkundu532@gmail.com\
             TEL;TYPE=CELL:+919832850190\
-            ADR:;;Bankura;West Bengal;722139;India\
+            ADR:;;kolkata;West Bengal;700163;India\
             END:VCARD',
 			summary: "Data Engineer with 4 years of experience in designing, developing, and optimizing scalable data pipelines and ETL workflows. Strong expertise in PySpark, Python, Azure Data Factory (ADF), Databricks, and data migration across environments. Proven ability to automate data workflows, implement monitoring solutions, and optimize data distribution for high-performance analytics. Adept at working in fast-paced environments and collaborating across teams to deliver reliable data solutions. Recognized with the INSTA Award for three consecutive quarters for exceptional performance and delivery.",
 			email: {
@@ -28,7 +28,7 @@ export class HumanService {
 			},
 			linkedin: {
 				text: '/in/debasish-kundu',
-				hyperLink: 'https://www.linkedin.com/in/debasish-kundu',
+				hyperLink: 'https://www.linkedin.com/in/dk-86205b193',
 			},
 			phone: {
 				text: '9832850190',
