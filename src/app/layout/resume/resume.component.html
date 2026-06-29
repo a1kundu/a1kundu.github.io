@@ -3,7 +3,7 @@
         <div class="bg-cyan-800 text-stone-300 flex justify-between p-1.5">
             <div class="text-left grid content-center ml-2">
                 <div class="text-3xl font-semibold">{{ data.name }}</div>
-                <b class="text-sm">{{ data.designation }} ({{ yearsOfExperience }} Experienced)</b>
+                <b class="text-sm">{{ data.designation }} (4 Years Experienced)</b>
                 <span class="text-sm">{{ data.address }}</span>
             </div>
             <div><qrcode matTooltipClass="my_tooltip" matTooltipHideDelay="500" matTooltip="Scan to get contact details" [qrdata]="vCardData" [allowEmptyString]="true" [cssClass]="'center'" [colorDark]="tailwindCss.theme.colors.stone[300]" [colorLight]="tailwindCss.theme.colors.cyan[800]" [elementType]="'svg'" [errorCorrectionLevel]="'L'" [margin]="1.5" [scale]="1" [title]="'A custom title attribute'" [width]="100"></qrcode></div>
